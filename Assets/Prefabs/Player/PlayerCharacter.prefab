@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5578058265510865430}
   - component: {fileID: -4907651857260065239}
   - component: {fileID: 3329659761355159938}
+  - component: {fileID: -2544003708442083420}
   m_Layer: 0
   m_Name: PlayerCharacter
   m_TagString: Untagged
@@ -46,6 +47,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4e77374622194249a48c486e3946396, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveStick: {fileID: 0}
+  aimStick: {fileID: 0}
+  moveSpeed: 5
+  turnSpeed: 10
+  cameraRig: {fileID: 0}
 --- !u!143 &3329659761355159938
 CharacterController:
   m_ObjectHideFlags: 0
@@ -72,6 +78,27 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1.56, z: 0}
+--- !u!95 &-2544003708442083420
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5518257891704569910}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 88ba486d780efc948a81f5bd24144a08, type: 3}
+  m_Controller: {fileID: 9100000, guid: ed82ae04556d30148a50e8370e0c991a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &301145342536244446
 PrefabInstance:
   m_ObjectHideFlags: 0
