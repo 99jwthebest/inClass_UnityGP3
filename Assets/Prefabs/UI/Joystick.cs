@@ -7,13 +7,20 @@ public class Joystick : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
 {
     // delegate - 
     public delegate void OnInputValueChanged(Vector2 inputValue);
+    public delegate void OnStickTapped();
 
     public event OnInputValueChanged onInputValueChanged;
+    public event OnStickTapped onStickTapped;
 
     [SerializeField]
     RectTransform thumbstick;
     [SerializeField]
     RectTransform background;
+    [SerializeField]
+    float deadZone = 0.2f;
+
+    Vector2 outputVal;
+    bool wasDragging = false;
 
     public void OnDrag(PointerEventData eventData)
     {
@@ -22,7 +29,12 @@ public class Joystick : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
         Vector3 thumbstickLocalOffset = Vector3.ClampMagnitude(touchPos - background.position, background.sizeDelta.x/2f);
 
         thumbstick.localPosition = thumbstickLocalOffset;
-        onInputValueChanged?.Invoke(thumbstickLocalOffset / background.sizeDelta.y * 2);
+         outputVal = thumbstickLocalOffset / background.sizeDelta.y * 2;
+        if (outputVal.magnitude > deadZone) // out put value has to be bigger than the dead zone before triggering the input value delegate.
+        {
+            onInputValueChanged?.Invoke(outputVal);
+            wasDragging = true;
+        }
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -39,6 +51,12 @@ public class Joystick : MonoBehaviour, IDragHandler, IPointerDownHandler, IPoint
         onInputValueChanged?.Invoke(Vector2.zero);
 
         Debug.Log($"pointer up");
+        if (wasDragging) // out put value has to be bigger than the dead zone before triggering the input value delegate.
+        {
+            wasDragging = false;
+            return;
+        }
+        onStickTapped?.Invoke();
     }
 
     // Start is called before the first frame update
