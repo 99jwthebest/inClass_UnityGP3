@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slotName: PistolSlot
+  animationOverride: {fileID: 22100000, guid: 43a96e5be2904e74e99815d90663d966, type: 2}
 --- !u!1001 &5992346941634497286
 PrefabInstance:
   m_ObjectHideFlags: 0

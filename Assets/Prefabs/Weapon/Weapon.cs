@@ -5,6 +5,7 @@ using UnityEngine;
 public abstract class Weapon : MonoBehaviour
 {
     [SerializeField] string slotName = "DefaultWeaponSlot";
+    [SerializeField] AnimatorOverrideController animationOverride;
 
     public string GetSlotName()
     {
@@ -24,6 +25,8 @@ public abstract class Weapon : MonoBehaviour
     public void Equip()
     {
         gameObject.SetActive(true);
+        // This applies the override to the animator.
+        Owner.GetComponent<Animator>().runtimeAnimatorController = animationOverride;
     }
 
     public void UnEquip()

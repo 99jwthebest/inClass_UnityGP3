@@ -33,6 +33,7 @@ public class InventoryComponent : MonoBehaviour
             }
 
             Weapon newWeapon = Instantiate<Weapon>(weaponPrefab, weaponSlot);
+            newWeapon.Initialize(gameObject);
             weapons.Add(newWeapon);
             newWeapon.UnEquip();
         }
