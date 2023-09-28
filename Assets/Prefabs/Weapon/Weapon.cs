@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,5 +34,13 @@ public abstract class Weapon : MonoBehaviour
     {
         gameObject.SetActive(false);
 
+    }
+
+    public abstract void Attack();
+
+    protected void DamageGameObject(GameObject objectToDamage, float damageAmt)
+    {
+        Debug.Log("weapon attack point");
+        objectToDamage.GetComponent<HealthComponent>()?.ChangeHealth(-damageAmt);
     }
 }

@@ -145,4 +145,10 @@ public class PlayerCharacter : MonoBehaviour
         characterController.Move(moveDir * moveSpeed * Time.deltaTime);
 
     }
+
+    public void DamagePoint()
+    {
+        Debug.Log("damage point");
+        inventoryComponent.DamagePoint();
+    }
 }
