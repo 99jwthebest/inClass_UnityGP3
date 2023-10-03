@@ -146,7 +146,7 @@ public class PlayerCharacter : MonoBehaviour
 
     }
 
-    public void DamagePoint()
+    public void DamagePointPC()
     {
         Debug.Log("damage point");
         inventoryComponent.DamagePoint();
