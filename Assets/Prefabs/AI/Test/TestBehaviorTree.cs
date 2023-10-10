@@ -13,11 +13,14 @@ public class TestBehaviorTree : BehaviorTree
         BTTask_Log logTask = ScriptableObject.CreateInstance<BTTask_Log>();
         logTask.SetMessage("logging");
 
-        Sequencer sequencer = ScriptableObject.CreateInstance<Sequencer>();
-        sequencer.AddChild(waitTask);
-        sequencer.AddChild(logTask);
+        //Sequencer sequencer = ScriptableObject.CreateInstance<Sequencer>();
+        Selector selector = ScriptableObject.CreateInstance<Selector>();
 
-        root.AddChild(waitTask);
+        selector.AddChild(new BTTask_AlwaysFail());
+        selector.AddChild(waitTask);
+        selector.AddChild(logTask);
+
+        root.AddChild(selector);
 
     }
 }

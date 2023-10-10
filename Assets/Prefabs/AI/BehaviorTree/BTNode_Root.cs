@@ -32,6 +32,11 @@ public class BTNode_Root : BTNode, IBTNodeParent
         }
     }
 
+    protected override BTNodeResult Execute()
+    {
+        return BTNodeResult.InProgress;
+    }
+
     protected override BTNodeResult Update()
     {
         return child.UpdateNode();
