@@ -35,4 +35,11 @@ public class BehaviorTreeEditor : EditorWindow
             m_BTNodeGraph.PopulateTree(selectedAsTree);
         }
     }
+
+    private void OnDestroy()
+    {
+        return;
+        if (m_BTNodeGraph != null)
+            m_BTNodeGraph.SaveTree();
+    }
 }
