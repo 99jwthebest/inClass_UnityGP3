@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -11,7 +10,7 @@ public class BehaviorTree : ScriptableObject
     BTNode_Root rootNode;
 
     [SerializeField]
-    List<BTNode> nodes = new List<BTNode>();
+    List<BTNode> nodes;
 
     //getter or accessor
     public List<BTNode> GetNodes() { return nodes; }
@@ -20,7 +19,8 @@ public class BehaviorTree : ScriptableObject
         if (!rootNode)
         {
             rootNode = CreateNode(typeof(BTNode_Root)) as BTNode_Root;
-            SaveTree();
+            EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssetIfDirty(this);
         }
 
         Construct(rootNode);
@@ -45,14 +45,12 @@ public class BehaviorTree : ScriptableObject
         nodes.Add(newNode);
         AssetDatabase.AddObjectToAsset(newNode, this);
 
-        SaveTree();
+        EditorUtility.SetDirty(this);
+        EditorUtility.SetDirty(newNode);
+
+        AssetDatabase.SaveAssetIfDirty(this);
+        AssetDatabase.SaveAssetIfDirty(newNode);
 
         return newNode;
-    }
-
-    public void SaveTree()
-    {
-        EditorUtility.SetDirty(this);
-        AssetDatabase.SaveAssetIfDirty(this);
     }
 }

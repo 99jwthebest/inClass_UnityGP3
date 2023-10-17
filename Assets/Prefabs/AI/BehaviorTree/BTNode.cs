@@ -14,9 +14,6 @@ public abstract class BTNode : ScriptableObject
 {
     bool isStarted = false;
 
-    [SerializeField]
-    Vector2 graphPos;
-
     // UpdateNode will be called by an update function in a monobehavior in the future.
     public BTNodeResult UpdateNode()
     {
@@ -54,15 +51,5 @@ public abstract class BTNode : ScriptableObject
     protected virtual BTNodeResult Execute()
     {
         return BTNodeResult.Success;
-    }
-
-    public void SetGraphPosition(Vector2 newPos)
-    {
-        graphPos = newPos;
-    }
-
-    public Vector2 GetGraphPosition()
-    {
-        return graphPos;
     }
 }
