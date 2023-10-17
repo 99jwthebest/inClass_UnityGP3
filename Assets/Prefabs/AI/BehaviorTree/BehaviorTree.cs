@@ -13,7 +13,7 @@ public class BehaviorTree : ScriptableObject
     [SerializeField]
     List<BTNode> nodes;
 
-    //getter or accessor
+    //getter or accssor for the nodes
     public List<BTNode> GetNodes() { return nodes; }
     public void PreConstruct()
     {
@@ -39,9 +39,7 @@ public class BehaviorTree : ScriptableObject
     public BTNode CreateNode(System.Type nodeType)
     {
         BTNode newNode = ScriptableObject.CreateInstance(nodeType) as BTNode;
-
         newNode.name = nodeType.Name;
-
         nodes.Add(newNode);
         AssetDatabase.AddObjectToAsset(newNode, this);
 
@@ -54,5 +52,12 @@ public class BehaviorTree : ScriptableObject
     {
         EditorUtility.SetDirty(this);
         AssetDatabase.SaveAssetIfDirty(this);
+    }
+
+    public void RemoveNode(BTNode node)
+    {
+        nodes.Remove(node);
+        AssetDatabase.RemoveObjectFromAsset(node);
+        SaveTree();
     }
 }

@@ -86,4 +86,9 @@ public abstract class BTNode : ScriptableObject
         return graphPos;
     }
 
+    public virtual bool Contains(BTNode node)
+    {
+        return this == node;
+    }
+
 }

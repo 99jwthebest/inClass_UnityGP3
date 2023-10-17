@@ -9,24 +9,25 @@ public class Compositor : BTNode, IBTNodeParent
 
     LinkedListNode<BTNode> current = null;
 
-    // move to the next avaliable node, return true if there is one.
+    public override BTNodePortType GetOutputPortType()
+    {
+        return BTNodePortType.Multi;
+    }
+
+    //move to the next avaliable node, return true if there is one.
     protected bool Next()
     {
-        if(current == null)
-            return false;
-        
         current = current.Next;
         return current != null;
     }
 
     protected override BTNodeResult Execute()
     {
-        if(children.Count == 0) return BTNodeResult.Success;
+        if (children.Count == 0) return BTNodeResult.Success;
 
         current = children.First;
         return BTNodeResult.InProgress;
     }
-
 
     protected BTNodeResult UpdateCurrent()
     {
@@ -56,10 +57,23 @@ public class Compositor : BTNode, IBTNodeParent
     public void SetChildren(List<BTNode> newChildren)
     {
         children.Clear();
-        foreach(BTNode child in newChildren)
+        foreach (BTNode child in newChildren)
         {
             children.AddLast(child);
         }
+    }
+
+    public override bool Contains(BTNode node)
+    {
+        foreach (BTNode child in children)
+        {
+            if (child.Contains(node))
+            {
+                return true;
+            }
+        }
+
+        return base.Contains(node);
     }
 
 }

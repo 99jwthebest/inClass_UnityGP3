@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: BTNode_Root
   m_EditorClassIdentifier: 
   graphPos: {x: 0, y: 0}
+  child: {fileID: 0}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
