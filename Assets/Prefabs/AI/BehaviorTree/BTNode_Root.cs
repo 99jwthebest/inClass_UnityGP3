@@ -24,6 +24,11 @@ public class BTNode_Root : BTNode, IBTNodeParent
 
     public List<BTNode> GetChildren()
     {
+        if(child == null)
+        {
+            return new List<BTNode>();
+        }
+
         return new List<BTNode> { child };
     }
 

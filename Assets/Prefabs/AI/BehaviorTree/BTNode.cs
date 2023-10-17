@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public enum BTNodeResult
@@ -23,6 +24,9 @@ public abstract class BTNode : ScriptableObject
 
     [SerializeField]
     Vector2 graphPos;
+
+    [SerializeField]
+    string guid = "";
 
 
     public virtual BTNodePortType GetInputPortType()
@@ -91,4 +95,13 @@ public abstract class BTNode : ScriptableObject
         return this == node;
     }
 
+    public string GetGUID()
+    {
+        if (guid == "")
+        {
+            guid = GUID.Generate().ToString();
+        }
+
+        return guid;
+    }
 }

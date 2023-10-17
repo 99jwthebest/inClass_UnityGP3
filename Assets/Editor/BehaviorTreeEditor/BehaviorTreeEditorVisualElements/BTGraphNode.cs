@@ -21,6 +21,7 @@ public class BTGraphNode : Node
         style.top = node.GetGraphPosition().y;
 
         CreatePorts();
+        viewDataKey = node.GetGUID();
     }
 
     private void CreatePorts()

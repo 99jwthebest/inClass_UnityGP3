@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 671e96361deec7048befe1840c46692c, type: 3}
   m_Name: BTNode_Root
   m_EditorClassIdentifier: 
-  graphPos: {x: 0, y: 0}
-  child: {fileID: 0}
+  graphPos: {x: 61.68, y: 31.216003}
+  guid: bde9556a3c2bb3948ac64fdc9b6eeb49
+  child: {fileID: 5290997895464152716}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29,3 +30,18 @@ MonoBehaviour:
   rootNode: {fileID: -3789009829522978805}
   nodes:
   - {fileID: -3789009829522978805}
+  - {fileID: 5290997895464152716}
+--- !u!114 &5290997895464152716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0188adc0857e1dd4ca8fa951d37dcde8, type: 3}
+  m_Name: Sequencer
+  m_EditorClassIdentifier: 
+  graphPos: {x: 304.80008, y: 253.35002}
+  guid: 0459003b05a5f6a4facd7bd3fadcf35a
