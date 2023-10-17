@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 671e96361deec7048befe1840c46692c, type: 3}
   m_Name: BTNode_Root
   m_EditorClassIdentifier: 
+  graphPos: {x: 0, y: 0}
 --- !u!114 &-6988024196135599707
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24,6 +25,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71b10ff1cee0f6047a62262c53ead8c5, type: 3}
   m_Name: Compositor
   m_EditorClassIdentifier: 
+  graphPos: {x: 0, y: 0}
 --- !u!114 &-6897621689468817982
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36,6 +38,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0188adc0857e1dd4ca8fa951d37dcde8, type: 3}
   m_Name: Sequencer
   m_EditorClassIdentifier: 
+  graphPos: {x: 0, y: 0}
 --- !u!114 &-4623152547461152395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48,6 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71b10ff1cee0f6047a62262c53ead8c5, type: 3}
   m_Name: Compositor
   m_EditorClassIdentifier: 
+  graphPos: {x: 0, y: 0}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76,4 +80,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 011ae1ae924dae146b53595f6e97bf30, type: 3}
   m_Name: BTTask_Log
   m_EditorClassIdentifier: 
+  graphPos: {x: 0, y: 0}
   message: 

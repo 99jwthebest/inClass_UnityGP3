@@ -54,8 +54,9 @@ public class BTNodeGraph : GraphView
 
     internal void PopulateTree(BehaviorTree selectedAsTree)
     {
-        Debug.Log($"Populating tree: {selectedAsTree.name}");
+        SaveTree();
 
+        DeleteElements(graphElements);
         tree = selectedAsTree;
         tree.PreConstruct(); // Ensures that there is the root node
         foreach(BTNode node in tree.GetNodes())
@@ -66,7 +67,7 @@ public class BTNodeGraph : GraphView
 
     internal void SaveTree()
     {
-        if(tree!=null)
+        if (tree)
         {
             tree.SaveTree();
         }

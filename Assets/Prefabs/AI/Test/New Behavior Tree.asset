@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42a06c1f8d40d7643a7d9ff710cbf636, type: 3}
   m_Name: Selector
   m_EditorClassIdentifier: 
+  graphPos: {x: 0, y: 0}
 --- !u!114 &-1201980188398920021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24,6 +25,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 671e96361deec7048befe1840c46692c, type: 3}
   m_Name: BTNode_Root
   m_EditorClassIdentifier: 
+  graphPos: {x: 0, y: 0}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
