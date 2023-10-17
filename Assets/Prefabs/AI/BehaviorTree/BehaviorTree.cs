@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -52,5 +53,11 @@ public class BehaviorTree : ScriptableObject
         AssetDatabase.SaveAssetIfDirty(newNode);
 
         return newNode;
+    }
+
+    public void SaveTree()
+    {
+        EditorUtility.SetDirty(this);
+        AssetDatabase.SaveAssetIfDirty(this);
     }
 }

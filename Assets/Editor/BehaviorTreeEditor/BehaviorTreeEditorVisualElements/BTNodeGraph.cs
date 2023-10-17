@@ -63,4 +63,12 @@ public class BTNodeGraph : GraphView
             CreateGraphNode(node);
         }
     }
+
+    internal void SaveTree()
+    {
+        if(tree!=null)
+        {
+            tree.SaveTree();
+        }
+    }
 }
