@@ -20,8 +20,7 @@ public class BehaviorTree : ScriptableObject
         if (!rootNode)
         {
             rootNode = CreateNode(typeof(BTNode_Root)) as BTNode_Root;
-            EditorUtility.SetDirty(this);
-            AssetDatabase.SaveAssetIfDirty(this);
+            SaveTree();
         }
 
         Construct(rootNode);
@@ -46,11 +45,7 @@ public class BehaviorTree : ScriptableObject
         nodes.Add(newNode);
         AssetDatabase.AddObjectToAsset(newNode, this);
 
-        EditorUtility.SetDirty(this);
-        EditorUtility.SetDirty(newNode);
-
-        AssetDatabase.SaveAssetIfDirty(this);
-        AssetDatabase.SaveAssetIfDirty(newNode);
+        SaveTree();
 
         return newNode;
     }
