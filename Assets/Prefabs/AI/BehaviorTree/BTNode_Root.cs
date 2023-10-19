@@ -67,4 +67,9 @@ public class BTNode_Root : BTNode, IBTNodeParent
 
         return base.Contains(node);
     }
+
+    public void SortChildren()
+    {
+
+    }
 }

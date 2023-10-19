@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -5,9 +6,10 @@ using UnityEngine;
 
 public class Compositor : BTNode, IBTNodeParent
 {
-    LinkedList<BTNode> children = new LinkedList<BTNode>();
+    [SerializeField]
+    List<BTNode> children = new List<BTNode>();
 
-    LinkedListNode<BTNode> current = null;
+    int currentChildIndex = -1;
 
     public override BTNodePortType GetOutputPortType()
     {
@@ -17,21 +19,25 @@ public class Compositor : BTNode, IBTNodeParent
     //move to the next avaliable node, return true if there is one.
     protected bool Next()
     {
-        current = current.Next;
-        return current != null;
+        if (currentChildIndex < children.Count - 1)
+        {
+            ++currentChildIndex;
+            return true;
+        }
+        return false;
     }
 
     protected override BTNodeResult Execute()
     {
         if (children.Count == 0) return BTNodeResult.Success;
 
-        current = children.First;
+        currentChildIndex = 0;
         return BTNodeResult.InProgress;
     }
 
     protected BTNodeResult UpdateCurrent()
     {
-        return current.Value.UpdateNode();
+        return children[currentChildIndex].UpdateNode();
     }
 
     protected override void End()
@@ -41,7 +47,7 @@ public class Compositor : BTNode, IBTNodeParent
 
     public void AddChild(BTNode childToAdd)
     {
-        children.AddLast(childToAdd);
+        children.Add(childToAdd);
     }
 
     public List<BTNode> GetChildren()
@@ -56,11 +62,7 @@ public class Compositor : BTNode, IBTNodeParent
 
     public void SetChildren(List<BTNode> newChildren)
     {
-        children.Clear();
-        foreach (BTNode child in newChildren)
-        {
-            children.AddLast(child);
-        }
+        children = newChildren;
     }
 
     public override bool Contains(BTNode node)
@@ -76,4 +78,23 @@ public class Compositor : BTNode, IBTNodeParent
         return base.Contains(node);
     }
 
+    public void SortChildren()
+    {
+        children.Sort(SortAlgrithm);
+    }
+
+    private int SortAlgrithm(BTNode x, BTNode y)
+    {
+        if (x.GetGraphPosition().x > y.GetGraphPosition().x)
+        {
+            return 1;
+        }
+
+        if (x.GetGraphPosition().x < y.GetGraphPosition().x)
+        {
+            return -1;
+        }
+
+        return 0;
+    }
 }

@@ -39,6 +39,11 @@ public class BTNodeGraph : GraphView
             HadleElementRemoval(graphViewChange.elementsToRemove);
         }
 
+        if(graphViewChange.movedElements != null)
+        {
+            tree.SortTree();
+        }
+
         return graphViewChange;
     }
 

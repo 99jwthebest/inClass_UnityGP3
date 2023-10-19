@@ -60,4 +60,16 @@ public class BehaviorTree : ScriptableObject
         AssetDatabase.RemoveObjectFromAsset(node);
         SaveTree();
     }
+
+    public void SortTree()
+    {
+        foreach (BTNode node in nodes)
+        {
+            IBTNodeParent parent = node as IBTNodeParent;
+            if(parent != null)
+            {
+                parent.SortChildren();
+            }
+        }
+    }
 }
