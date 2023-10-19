@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -8,6 +9,7 @@ public class BehaviorTreeEditor : EditorWindow
     private VisualTreeAsset m_VisualTreeAsset = default;
 
     private BTNodeGraph m_BTNodeGraph = null;
+    private BTInspector m_BTInspector = null;
 
     [MenuItem("BehaviorTree/Behavior Tree Editor")]
     public static void ShowExample()
@@ -23,6 +25,23 @@ public class BehaviorTreeEditor : EditorWindow
 
         m_VisualTreeAsset.CloneTree(root);
         m_BTNodeGraph = root.Q<BTNodeGraph>();
+        m_BTNodeGraph.onNodeSelected += NodeSelected;
+        m_BTInspector = root.Q<BTInspector>();
+
+        EditorApplication.playModeStateChanged += PlayModeChanged;
+    }
+
+    private void PlayModeChanged(PlayModeStateChange change)
+    {
+        if(change == PlayModeStateChange.EnteredEditMode || change == PlayModeStateChange.EnteredEditMode)
+        {
+            OnSelectionChange();
+        }
+    }
+
+    private void NodeSelected(BTNode node)
+    {
+        m_BTInspector.ShowInspectorGUI(node);
     }
 
     // This is called when the selection is changed in the editor
@@ -30,6 +49,16 @@ public class BehaviorTreeEditor : EditorWindow
     {
         //Debug.Log($"new object selected: {Selection.activeObject.name}");
         BehaviorTree selectedAsTree = Selection.activeObject as BehaviorTree;
+
+        if(selectedAsTree == null)
+        {
+            if (Selection.activeGameObject)
+            {
+                selectedAsTree = Selection.activeGameObject.GetComponent<AIController>()?.GetBehaviorTree();
+            }
+
+        }
+
         if (selectedAsTree != null)
         {
             m_BTNodeGraph.PopulateTree(selectedAsTree);

@@ -20,12 +20,16 @@ public enum BTNodePortType
 
 public abstract class BTNode : ScriptableObject
 {
+    public delegate void OnNodesStateChanged(BTNodeResult newState);
+    public event OnNodesStateChanged onNodeStateChanged;
     bool isStarted = false;
 
     [SerializeField]
+    [HideInInspector]
     Vector2 graphPos;
 
     [SerializeField]
+    [HideInInspector]
     string guid = "";
 
 
@@ -47,6 +51,7 @@ public abstract class BTNode : ScriptableObject
         if(!isStarted)
         {
             BTNodeResult executeResult = Execute();
+            onNodeStateChanged?.Invoke(executeResult);
             isStarted = true;
             // if not in progress, we have wither failed or succesded
             if(executeResult != BTNodeResult.InProgress)
@@ -57,6 +62,8 @@ public abstract class BTNode : ScriptableObject
         }
 
         BTNodeResult updateResult = Update();
+        onNodeStateChanged?.Invoke(updateResult);
+
         if(updateResult != BTNodeResult.InProgress)
         {
             End();
@@ -103,5 +110,10 @@ public abstract class BTNode : ScriptableObject
         }
 
         return guid;
+    }
+
+    public virtual BTNode CloneNode() 
+    {
+        return Instantiate(this);
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
@@ -6,6 +7,9 @@ using UnityEngine;
 public class BTGraphNode : Node
 {
     public BTNode Node { get; private set; }
+
+    public delegate void OnNodeSelected(BTNode node);
+    public event OnNodeSelected onNodeselected;
 
     Port inputPort;
     Port outputPort;
@@ -22,6 +26,25 @@ public class BTGraphNode : Node
 
         CreatePorts();
         viewDataKey = node.GetGUID();
+        node.onNodeStateChanged += NodeStateChanged;
+    }
+
+    private void NodeStateChanged(BTNodeResult newState)
+    {
+        switch (newState)
+        {
+            case BTNodeResult.Success:
+                style.backgroundColor = Color.gray;
+                break;
+            case BTNodeResult.InProgress: 
+                style.backgroundColor = Color.green;
+                break;
+            case BTNodeResult.Failure:
+                style.backgroundColor = Color.red;
+                break;
+            default:
+                break;
+        }
     }
 
     private void CreatePorts()
@@ -64,5 +87,11 @@ public class BTGraphNode : Node
     {
         base.SetPosition(newPos);
         Node.SetGraphPosition(new Vector2(newPos.xMin, newPos.yMin));
+    }
+
+    public override void OnSelected()
+    {
+        base.OnSelected();
+        onNodeselected?.Invoke(Node);
     }
 }

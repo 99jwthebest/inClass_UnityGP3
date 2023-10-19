@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine;
 public class BTNode_Root : BTNode, IBTNodeParent
 {
     [SerializeField]
+    [HideInInspector]
     BTNode child;
 
     public override BTNodePortType GetInputPortType()
@@ -72,4 +74,13 @@ public class BTNode_Root : BTNode, IBTNodeParent
     {
 
     }
+
+    public override BTNode CloneNode()
+    {
+        BTNode_Root selfClone = Instantiate(this);
+        selfClone.child = child.CloneNode();
+
+        return selfClone;
+    }
+
 }

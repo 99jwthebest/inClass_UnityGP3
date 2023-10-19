@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -69,6 +70,34 @@ public class BehaviorTree : ScriptableObject
             if(parent != null)
             {
                 parent.SortChildren();
+            }
+        }
+    }
+
+    internal BehaviorTree CloneTree()
+    {
+        BehaviorTree clone = Instantiate(this);
+        clone.rootNode = rootNode.CloneNode() as BTNode_Root;
+
+        clone.nodes = new List<BTNode>();
+
+        Traverse(clone.rootNode, (BTNode node) =>
+        {
+            clone.nodes.Add(node);
+        });
+
+        return clone;
+    }
+
+    public void Traverse(BTNode node, System.Action<BTNode> visitor)
+    {
+        visitor(node);
+        IBTNodeParent nodeAsParent = node as IBTNodeParent;
+        if(nodeAsParent != null) 
+        {
+            foreach(BTNode child in nodeAsParent.GetChildren())
+            {
+                Traverse(child, visitor);
             }
         }
     }
