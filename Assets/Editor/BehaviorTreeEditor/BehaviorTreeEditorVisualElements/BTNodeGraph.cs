@@ -26,6 +26,15 @@ public class BTNodeGraph : GraphView
         StyleSheet styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Editor/BehaviorTreeEditor/BehaviorTreeEditor.uss");
         styleSheets.Add(styleSheet);
         graphViewChanged += GraphChange;
+        Undo.undoRedoPerformed += RefreshGraph;
+    }
+
+    private void RefreshGraph()
+    {
+        if (tree)
+        {
+            PopulateTree(tree);
+        }
     }
 
     //this function will be called if the graph changes.
@@ -65,7 +74,10 @@ public class BTNodeGraph : GraphView
                 }
                 else
                 {
+                    Undo.RecordObject(tree, "Delete Behavior Tree Node");
                     tree.RemoveNode(graphNode.Node);
+                    Undo.DestroyObjectImmediate(graphNode.Node);
+                    EditorUtility.SetDirty(tree);
                 }
             }
 
@@ -79,7 +91,9 @@ public class BTNodeGraph : GraphView
                 IBTNodeParent parent = inputGraphNode.Node as IBTNodeParent;
                 if (parent != null)
                 {
+                    Undo.RecordObject(inputGraphNode.Node, "Delete Behavior Tree Connection");
                     parent.RemoveChild(outputGraphNode.Node);
+                    EditorUtility.SetDirty(inputGraphNode.Node);
                 }
             }
         }
@@ -122,8 +136,11 @@ public class BTNodeGraph : GraphView
 
     private void CreateNode(Type nodeType)
     {
+        Undo.RecordObject(tree, "Add Behavior Tree Node");
         BTNode newNode = tree.CreateNode(nodeType);
+        Undo.RegisterCreatedObjectUndo(newNode, "Add Behavior Tree Node");
         CreateGraphNode(newNode);
+
     }
 
     private void CreateGraphNode(BTNode newNode)
