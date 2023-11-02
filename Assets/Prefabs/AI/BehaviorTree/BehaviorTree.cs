@@ -14,6 +14,12 @@ public class BehaviorTree : ScriptableObject
     [SerializeField]
     List<BTNode> nodes;
 
+    [SerializeField]
+    Blackboard blackboard;
+
+    BTNode currentNode;
+    public Blackboard GetBlackBoard() { return blackboard; }
+
     //getter or accssor for the nodes
     public List<BTNode> GetNodes() { return nodes; }
     public void PreConstruct()
@@ -32,6 +38,27 @@ public class BehaviorTree : ScriptableObject
 
     }
 
+    public void AbortIfCurrentIsLower(int priority)
+    {
+        if (currentNode.GetPriority() > priority)
+        {
+            rootNode.End();
+        }
+    }
+    public void Start()
+    {
+        SortTree();
+        foreach (BTNode node in nodes)
+        {
+            node.onBecomeActive += CurrentNodeChanged;
+        }
+    }
+
+    private void CurrentNodeChanged(BTNode node)
+    {
+        currentNode = node;
+    }
+
     public void Update()
     {
         rootNode.UpdateNode();
@@ -41,6 +68,7 @@ public class BehaviorTree : ScriptableObject
     {
         BTNode newNode = ScriptableObject.CreateInstance(nodeType) as BTNode;
         newNode.name = nodeType.Name;
+        newNode.Init(this);
         nodes.Add(newNode);
         AssetDatabase.AddObjectToAsset(newNode, this);
 
@@ -51,6 +79,7 @@ public class BehaviorTree : ScriptableObject
 
     public void SaveTree()
     {
+        SortTree();
         EditorUtility.SetDirty(this);
         AssetDatabase.SaveAssetIfDirty(this);
     }
@@ -58,7 +87,7 @@ public class BehaviorTree : ScriptableObject
     public void RemoveNode(BTNode node)
     {
         nodes.Remove(node);
-        AssetDatabase.RemoveObjectFromAsset(node);
+        //AssetDatabase.RemoveObjectFromAsset(node);
         SaveTree();
     }
 
@@ -67,11 +96,16 @@ public class BehaviorTree : ScriptableObject
         foreach (BTNode node in nodes)
         {
             IBTNodeParent parent = node as IBTNodeParent;
-            if(parent != null)
+            if (parent != null)
             {
                 parent.SortChildren();
             }
         }
+        int priorityCounter = 0;
+        Traverse(rootNode, (BTNode n) =>
+        {
+            n.SortPriority(ref priorityCounter);
+        });
     }
 
     internal BehaviorTree CloneTree()
@@ -80,11 +114,15 @@ public class BehaviorTree : ScriptableObject
         clone.rootNode = rootNode.CloneNode() as BTNode_Root;
 
         clone.nodes = new List<BTNode>();
+        clone.blackboard = Instantiate(blackboard);
 
-        Traverse(clone.rootNode, (BTNode node) =>
-        {
-            clone.nodes.Add(node);
-        });
+        Traverse(clone.rootNode,
+            (BTNode node) =>
+            {
+                clone.nodes.Add(node);
+                node.Init(clone);
+            }
+        );
 
         return clone;
     }
@@ -93,12 +131,16 @@ public class BehaviorTree : ScriptableObject
     {
         visitor(node);
         IBTNodeParent nodeAsParent = node as IBTNodeParent;
-        if(nodeAsParent != null) 
+        if (nodeAsParent != null)
         {
-            foreach(BTNode child in nodeAsParent.GetChildren())
+            foreach (BTNode child in nodeAsParent.GetChildren())
             {
                 Traverse(child, visitor);
             }
         }
     }
+
+    // () is the call operator.
+    // [] is the subscription operator.
+    // = - = * also operators.
 }

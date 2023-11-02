@@ -20,8 +20,8 @@ public enum BTNodePortType
 
 public abstract class BTNode : ScriptableObject
 {
-    public delegate void OnNodesStateChanged(BTNodeResult newState);
-    public event OnNodesStateChanged onNodeStateChanged;
+    public delegate void OnNodeStateChanged(BTNodeResult newState);
+    public event OnNodeStateChanged onNodeStateChanged;
     bool isStarted = false;
 
     [SerializeField]
@@ -32,6 +32,26 @@ public abstract class BTNode : ScriptableObject
     [HideInInspector]
     string guid = "";
 
+    [SerializeField]
+    int priority;
+
+    BehaviorTree owningBehaviorTree;
+    public Action<BTNode> onBecomeActive;
+    public int GetPriority() { return priority; }
+    public void SortPriority(ref int priorityCount)
+    {
+        priority = priorityCount++;
+    }
+
+    public void Init(BehaviorTree behaviorTree)
+    {
+        owningBehaviorTree = behaviorTree;
+    }
+
+    public BehaviorTree GetBehaviorTree()
+    {
+        return owningBehaviorTree;
+    }
 
     public virtual BTNodePortType GetInputPortType()
     {
@@ -44,17 +64,16 @@ public abstract class BTNode : ScriptableObject
     }
 
 
-
-    // UpdateNode will be called by an update function in a monobehavior in the future.
+    //UpdateNode will be called by an update function in a monobehavior in the future.
     public BTNodeResult UpdateNode()
     {
-        if(!isStarted)
+        if (!isStarted)
         {
             BTNodeResult executeResult = Execute();
             onNodeStateChanged?.Invoke(executeResult);
             isStarted = true;
-            // if not in progress, we have wither failed or succesded
-            if(executeResult != BTNodeResult.InProgress)
+            //if not in progess, we have either failed or successed.
+            if (executeResult != BTNodeResult.InProgress)
             {
                 End();
                 return executeResult;
@@ -64,15 +83,14 @@ public abstract class BTNode : ScriptableObject
         BTNodeResult updateResult = Update();
         onNodeStateChanged?.Invoke(updateResult);
 
-        if(updateResult != BTNodeResult.InProgress)
+        if (updateResult != BTNodeResult.InProgress)
         {
             End();
         }
-
         return updateResult;
     }
 
-    protected virtual void End()
+    public virtual void End()
     {
         isStarted = false;
     }
@@ -112,7 +130,7 @@ public abstract class BTNode : ScriptableObject
         return guid;
     }
 
-    public virtual BTNode CloneNode() 
+    public virtual BTNode CloneNode()
     {
         return Instantiate(this);
     }

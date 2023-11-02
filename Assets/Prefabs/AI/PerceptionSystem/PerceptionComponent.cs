@@ -10,11 +10,22 @@ public class PerceptionComponent : MonoBehaviour
     List<Sense> instantiatedSenses = new List<Sense>();
     LinkedList<PerceptionStimuli> perceivedStimulis = new LinkedList<PerceptionStimuli>();
 
+    public Action<GameObject> onTargetUpdated;
+
     GameObject target;
+
+    void SetTarget(GameObject newTarget)
+    {
+        if (target != newTarget)
+        {
+            target = newTarget;
+            onTargetUpdated?.Invoke(target);
+        }
+    }
 
     private void Awake()
     {
-        foreach(var sense in startSenses)
+        foreach (var sense in startSenses)
         {
             Sense newSense = ScriptableObject.Instantiate(sense);
             instantiatedSenses.Add(newSense);
@@ -25,11 +36,11 @@ public class PerceptionComponent : MonoBehaviour
 
     private void PerceptionUpdated(PerceptionStimuli stimuli, bool successfullySensed)
     {
-        // updating link list
+        //update the linked linked list
         var node = perceivedStimulis.Find(stimuli);
-        if(successfullySensed)
+        if (successfullySensed)
         {
-            if(node != null)
+            if (node != null)
             {
                 perceivedStimulis.AddAfter(node, stimuli);
             }
@@ -45,25 +56,27 @@ public class PerceptionComponent : MonoBehaviour
 
 
 
-        // determining if target needs to be updated
-        if(perceivedStimulis.Count != 0)
+
+
+
+        //determining if target need to be updated
+        if (perceivedStimulis.Count != 0)
         {
-            if(target == null || target != perceivedStimulis.First.Value)
+            if (target == null || target != perceivedStimulis.First.Value)
             {
-                target = perceivedStimulis.First.Value.gameObject;
+                SetTarget(perceivedStimulis.First.Value.gameObject);
             }
         }
         else
         {
-            target = null;
+            SetTarget(null);
         }
-
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -71,19 +84,18 @@ public class PerceptionComponent : MonoBehaviour
     {
         foreach (var sense in instantiatedSenses)
         {
-             sense.Update();
+            sense.Update();
         }
     }
 
-
     private void OnDrawGizmos()
     {
-        foreach(Sense sense in instantiatedSenses)
+        foreach (Sense sense in instantiatedSenses)
         {
             sense.DrawDebug();
         }
 
-        if(target != null)
+        if (target != null)
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(target.transform.position, 1f);

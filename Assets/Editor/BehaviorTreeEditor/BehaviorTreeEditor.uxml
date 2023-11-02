@@ -2,6 +2,9 @@
     <Style src="project://database/Assets/Editor/BehaviorTreeEditor/BehaviorTreeEditor.uss?fileID=7433441132597879392&amp;guid=712c9afcddff6924a887bc6a43cf8bd2&amp;type=3#BehaviorTreeEditor" />
     <SplitView fixed-pane-initial-dimension="300" fixed-pane-index="1">
         <BTNodeGraph focusable="true" style="flex-grow: 1;" />
-        <BTInspector style="flex-grow: 0.5;" />
+        <SplitView orientation="Vertical" fixed-pane-index="1" fixed-pane-initial-dimension="173">
+            <BTInspector style="flex-grow: 0.5;" />
+            <BTBlackboardInspector />
+        </SplitView>
     </SplitView>
 </ui:UXML>

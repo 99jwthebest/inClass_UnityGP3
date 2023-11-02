@@ -8,19 +8,34 @@ public class AIController : MonoBehaviour
     [SerializeField] BehaviorTree behaviorTreeAsset;
 
     BehaviorTree behaviorTree;
+    PerceptionComponent perceptionComponent;
+    private void Awake()
+    {
+        perceptionComponent = GetComponent<PerceptionComponent>();
+        if (perceptionComponent)
+        {
+            perceptionComponent.onTargetUpdated += TargetUpdated;
+        }
+    }
+
+    private void TargetUpdated(GameObject newTarget)
+    {
+        behaviorTree.GetBlackBoard().SetBlackboardData("target", newTarget);
+    }
 
     // Start is called before the first frame update
     void Start()
     {
         behaviorTree = behaviorTreeAsset.CloneTree();
-        behaviorTree?.PreConstruct();  // question mark means null check, instead of having to write and if statement for null check
+        behaviorTree?.PreConstruct();
+        behaviorTree.GetBlackBoard().SetBlackboardData("owner", gameObject);
     }
 
-    public BehaviorTree GetBehaviorTree() 
+    public BehaviorTree GetBehaviorTree()
     {
         if (behaviorTree)
         {
-            return behaviorTree; 
+            return behaviorTree;
         }
 
         return behaviorTreeAsset;

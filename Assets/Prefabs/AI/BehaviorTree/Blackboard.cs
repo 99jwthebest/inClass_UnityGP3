@@ -13,9 +13,8 @@ public enum BlackboardType
     GameObject
 }
 
-
 [Serializable]
-public class  BlackboardEntry
+public class BlackboardEntry
 {
     [SerializeField] string keyName;
     [SerializeField] object value;
@@ -23,26 +22,25 @@ public class  BlackboardEntry
     [SerializeField] BlackboardType type;
 
     public string GetKeyName() { return keyName; }
-
-    public BlackboardEntry(string keyName, BlackboardType type)
+    public BlackboardEntry(string keyname, BlackboardType type)
     {
-        this.keyName = keyName;
+        this.keyName = keyname;
         this.value = null;
         this.runtimeValue = "null";
         this.type = type;
     }
 
-    // if val is null, clears the data.
+    //if val is null, clears the data.
     public bool SetVal<T>(T val)
     {
-        if(val == null)
+        if (val == null)
         {
             value = null;
             runtimeValue = "null";
             return true;
         }
 
-        if(val.GetType() != typeDictionary[type])
+        if (val.GetType() != typeDictionary[type])
         {
             Debug.LogError($"trying to set blackboard data: {keyName}, with type {val.GetType()}, should be: {typeDictionary[type]}");
             return false;
@@ -56,65 +54,84 @@ public class  BlackboardEntry
     public bool GetVal<T>(out T val)
     {
         val = default;
-        if(value == null) return false;
+        if (value == null) return false;
 
-        if(val.GetType() != typeDictionary[type])
+        if (typeof(T) != typeDictionary[type])
         {
             return false;
         }
 
-        return false;
+        val = (T)value; //casting is safe here, because we have guarenteed that the type T is the type of the value member variable.
+        return true;
     }
 
-    static Dictionary<BlackboardType, System.Type> typeDictionary = new Dictionary<BlackboardType, Type>
+    private static Dictionary<BlackboardType, System.Type> typeDictionary = new Dictionary<BlackboardType, Type>
     {
-        {BlackboardType.Float, typeof(float) },
-        {BlackboardType.Int, typeof(int) },
-        {BlackboardType.Bool, typeof(bool) },
-        {BlackboardType.Vector3, typeof(Vector3) },
-        {BlackboardType.GameObject, typeof(GameObject) },
+        {BlackboardType.Float, typeof(float)},
+        {BlackboardType.Int, typeof(int)},
+        {BlackboardType.Bool, typeof(bool)},
+        {BlackboardType.Vector3 , typeof(Vector3)},
+        {BlackboardType.GameObject, typeof(GameObject)}
     };
 
-};
-
-
+    internal object GetRawValue()
+    {
+        return value;
+    }
+}
 [CreateAssetMenu(menuName = "BehaviorTree/Blackboard")]
 public class Blackboard : ScriptableObject
 {
     [SerializeField]
     List<BlackboardEntry> blackboardData;
 
-    public delegate void OnBlackboardValueChanged(BlackboardEntry entry);
-    public event OnBlackboardValueChanged onBlackboardValueChanged;
+    public delegate void OnBloackboardValueChanged(BlackboardEntry entry);
+    public event OnBloackboardValueChanged onBlackboardValueChanged;
 
-    bool SetBlackboardData<T>(string keyName, T val)
+    public bool SetBlackboardData<T>(string keyName, T val)
     {
-        foreach(var entry in blackboardData)
+        foreach (var entry in blackboardData)
         {
-            if(entry.GetKeyName() == keyName)
+            if (entry.GetKeyName() == keyName)
             {
-                onBlackboardValueChanged?.Invoke(entry);
-                return true;
-            }
-            else
-            {
-                return false;
+                if (entry.SetVal(val))
+                {
+                    onBlackboardValueChanged?.Invoke(entry);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
 
         return false;
     }
 
-    bool GetBlackboardData<T>(string keyName, out T val)
+    public bool GetBlackboardData<T>(string keyName, out T val)
     {
-        foreach(var entry in blackboardData)
+        foreach (var entry in blackboardData)
         {
-            if(entry.GetKeyName() == keyName)
+            if (entry.GetKeyName() == keyName)
             {
                 return entry.GetVal(out val);
             }
         }
         val = default;
         return false;
+    }
+
+    internal object GetBlackboardRawData(string keyName)
+    {
+        foreach (var entry in blackboardData)
+        {
+            if (entry.GetKeyName() == keyName)
+            {
+                return entry.GetRawValue();
+            }
+        }
+
+        return null;
     }
 }
