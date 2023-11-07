@@ -4,13 +4,20 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IMovementInterface, IBTTaskInterface
 {
     [SerializeField] ValueGauge healthBarPrefab;
     [SerializeField] Transform healthBarAttachTransform;
     HealthComponent healthComponent;
 
+    MovementComponent movementComponent;
+
     ValueGauge healthBar;
+
+    Animator animator;
+
+    Vector3 prevLocation;
+    Vector3 velocity;
 
     private void Awake()
     {
@@ -22,7 +29,26 @@ public class Enemy : MonoBehaviour
         healthBar = Instantiate(healthBarPrefab, FindObjectOfType<Canvas>().transform);
         UIAttachComponent attachmentComp = healthBar.AddComponent<UIAttachComponent>();
         attachmentComp.SetupAttachment(healthBarAttachTransform);
+        movementComponent = GetComponent<MovementComponent>();
+
     }
+
+    void Start()
+    {
+
+    }
+
+    void Update()
+    {
+
+    }
+
+    private void CalculateVelocity()
+    {
+
+    }
+
+
 
     private void HealthChanged(float currentHealth, float delta, float maxHealth)
     {
@@ -40,16 +66,20 @@ public class Enemy : MonoBehaviour
 
     }
 
+   
 
-    // Start is called before the first frame update
-    void Start()
+    public void RotateTowards(Vector3 direction)
     {
-        
+        movementComponent.RotateTowards(direction);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void RotateTowards(GameObject target)
     {
-        
+        movementComponent.RotateTowards(target.transform.position - transform.position);
+    }
+
+    public void AttackTarget(GameObject target)
+    {
+        throw new NotImplementedException();
     }
 }

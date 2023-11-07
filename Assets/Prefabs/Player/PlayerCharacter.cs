@@ -13,6 +13,7 @@ public class PlayerCharacter : MonoBehaviour
     [SerializeField] CameraRig cameraRig;
     CharacterController characterController;
     InventoryComponent inventoryComponent;
+    MovementComponent movementComponent;
     Vector2 moveInput;
     Vector2 aimInput;
 
@@ -40,6 +41,7 @@ public class PlayerCharacter : MonoBehaviour
         myCamera = Camera.main;
         animator = GetComponent<Animator>();
         inventoryComponent = GetComponent<InventoryComponent>();
+        movementComponent = GetComponent<MovementComponent>();
     }
 
     private void AimStickTapped()
@@ -91,20 +93,11 @@ public class PlayerCharacter : MonoBehaviour
         // if aim has input, use the aim to determine the turning, if not, use the move input.
         Vector3 lookDir = aimDir.magnitude != 0 ? aimDir : moveDir; // oneliner considered bad practice
 
-        float goalAnimTurnSpeed = 0f;
+        float goalAnimTurnSpeed = movementComponent.RotateTowards(lookDir);
+
         if (lookDir.magnitude != 0)
         {
-            Quaternion prevRot = transform.rotation; // before rotate
-
-            Quaternion nextRot = Quaternion.LookRotation(lookDir, Vector3.up);
-            transform.rotation = Quaternion.Lerp(transform.rotation, nextRot, turnSpeed * Time.deltaTime);
-            Quaternion newRot = transform.rotation; // after rotate
-
-            float rotationDelta = Quaternion.Angle(prevRot, newRot); // how much we have rotated in this frame.
-
-            float rotateDir = Vector3.Dot(lookDir, transform.right) > 0 ? 1 : -1;
-
-            goalAnimTurnSpeed = rotationDelta / Time.deltaTime * rotateDir;
+            
         }
 
         // Smoothes out the turning

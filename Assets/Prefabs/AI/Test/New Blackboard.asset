@@ -22,3 +22,6 @@ MonoBehaviour:
   - keyName: target
     runtimeValue: 
     type: 4
+  - keyName: lastSeenLocation
+    runtimeValue: 
+    type: 3
