@@ -20,6 +20,8 @@ public class BehaviorTree : ScriptableObject
     BTNode currentNode;
     public Blackboard GetBlackBoard() { return blackboard; }
 
+    bool stopped;
+
     //getter or accssor for the nodes
     public List<BTNode> GetNodes() { return nodes; }
     public void PreConstruct()
@@ -52,6 +54,13 @@ public class BehaviorTree : ScriptableObject
         {
             node.onBecomeActive += CurrentNodeChanged;
         }
+        stopped = false;
+    }
+
+    public void Stop()
+    {
+        stopped = true;
+        rootNode.End();
     }
 
     private void CurrentNodeChanged(BTNode node)
@@ -61,6 +70,9 @@ public class BehaviorTree : ScriptableObject
 
     public void Update()
     {
+        if (stopped)
+            return;
+
         rootNode.UpdateNode();
     }
 

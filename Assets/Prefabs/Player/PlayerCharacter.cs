@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerCharacter : MonoBehaviour
+public class PlayerCharacter : MonoBehaviour, ITeamInterface
 {
     [SerializeField] private Joystick moveStick;
     [SerializeField] private Joystick aimStick;
@@ -11,9 +11,13 @@ public class PlayerCharacter : MonoBehaviour
     [SerializeField] float turnSpeed = 10f;
     [SerializeField] float turnAnimationSmoothLerpFactor = 10f;
     [SerializeField] CameraRig cameraRig;
+    [SerializeField] int teamID = 1;
+    [SerializeField] UIManager uiManager;
+
     CharacterController characterController;
     InventoryComponent inventoryComponent;
     MovementComponent movementComponent;
+    HealthComponent healthComponent;
     Vector2 moveInput;
     Vector2 aimInput;
 
@@ -25,6 +29,8 @@ public class PlayerCharacter : MonoBehaviour
     Animator animator;
 
     float animTurnSpeed = 0f;
+
+    //public int GetTeamID()
 
     public void SwitchWeapon()
     {
@@ -42,6 +48,14 @@ public class PlayerCharacter : MonoBehaviour
         animator = GetComponent<Animator>();
         inventoryComponent = GetComponent<InventoryComponent>();
         movementComponent = GetComponent<MovementComponent>();
+        healthComponent = GetComponent<HealthComponent>();
+        healthComponent.onHealthEmpty += StartDeath;
+    }
+
+    private void StartDeath(float delta, float maxHealth)
+    {
+        animator.SetTrigger("die");
+        uiManager.SetGameplayControlEnabled(false);
     }
 
     private void AimStickTapped()
