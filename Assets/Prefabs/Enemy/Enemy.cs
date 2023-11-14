@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour, IMovementInterface, IBTTaskInterface, ITeamInterface
 {
@@ -20,6 +21,8 @@ public class Enemy : MonoBehaviour, IMovementInterface, IBTTaskInterface, ITeamI
     Vector3 prevLocation;
     Vector3 velocity;
 
+    NavMeshAgent agent;
+
     private void Awake()
     {
         healthComponent = GetComponent<HealthComponent>();
@@ -33,7 +36,7 @@ public class Enemy : MonoBehaviour, IMovementInterface, IBTTaskInterface, ITeamI
         movementComponent = GetComponent<MovementComponent>();
         animator = GetComponent<Animator>();
         damageComponent.SetTeamInterface(this);
-
+        agent = GetComponent<NavMeshAgent>();
     }
 
     //public int GetTeamID() { return };
