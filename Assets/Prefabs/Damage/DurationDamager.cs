@@ -7,15 +7,17 @@ public class DurationDamager : MonoBehaviour
     float duration;
     float damage;
 
-    public void Init(float duration, float damage, HealthComponent healthComp, GameObject instigator)
+    public void Init(float duration, float damage, HealthComponent healthComp, GameObject instigator, GameObject damageVFXPrefab)
     {
         this.duration = duration;
         this.damage = damage;
 
-        StartCoroutine(DamageCoroutine(healthComp, instigator));
+        GameObject damageVFX = Instantiate(damageVFXPrefab, healthComp.transform);
+
+        StartCoroutine(DamageCoroutine(healthComp, instigator, damageVFX));
     }
 
-    IEnumerator DamageCoroutine(HealthComponent healthComp, GameObject instigator)
+    IEnumerator DamageCoroutine(HealthComponent healthComp, GameObject instigator, GameObject damageVFX)
     {
         float timeElapsed = 0;
         float damageRate = damage / duration;
@@ -27,6 +29,7 @@ public class DurationDamager : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
+        Destroy(damageVFX);
         Destroy(this);
     }
 

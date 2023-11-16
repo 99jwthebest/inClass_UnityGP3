@@ -13,6 +13,7 @@ public class Fire : Ability
     [SerializeField] float damageDuration = 3f;
 
     [SerializeField] GameObject ScanVFX;
+    [SerializeField] GameObject damageVFX;
     TargetScanner scanner;
     public override void ActivateAbility()
     {
@@ -37,6 +38,7 @@ public class Fire : Ability
 
         // do the coroutine?
         DurationDamager damager = targetHealthComp.gameObject.AddComponent<DurationDamager>();
-        damager.Init(damageDuration, damage, targetHealthComp, OwningAbilityComponent.gameObject);
+        damager.Init(damageDuration, damage, targetHealthComp, OwningAbilityComponent.gameObject, damageVFX);
+
     }
 }
