@@ -40,6 +40,8 @@ public class PlayerCharacter : MonoBehaviour, ITeamInterface
 
     private void Awake() // for initiallizing values
     {
+        GameplayStatics.SetPlayerGameObject(gameObject);
+
         moveStick.onInputValueChanged += MoveInputUpdated;
         aimStick.onInputValueChanged += AimInputUpdated;
         aimStick.onStickTapped += AimStickTapped;
