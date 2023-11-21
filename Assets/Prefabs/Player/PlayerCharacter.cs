@@ -14,6 +14,10 @@ public class PlayerCharacter : MonoBehaviour, ITeamInterface
     [SerializeField] int teamID = 1;
     [SerializeField] UIManager uiManager;
 
+    ////TODO: Testing only
+    //[SerializeField] Shop test_shop;
+    //[SerializeField] ShopItem test_Item;
+
     CharacterController characterController;
     InventoryComponent inventoryComponent;
     MovementComponent movementComponent;
@@ -82,7 +86,9 @@ public class PlayerCharacter : MonoBehaviour, ITeamInterface
     void Start()
     {
         // starting logics
+        //Invoke("Test_Purchase", 2f);
     }
+
 
     // Update is called once per frame
     void Update()
@@ -91,6 +97,12 @@ public class PlayerCharacter : MonoBehaviour, ITeamInterface
         ProcessAimInput();
         UpdateAnimation();
     }
+
+    //void Test_Purchase()
+    //{
+    //    test_shop.TryPurchase(test_Item, GetComponent<CreditComponent>());
+    //}
+
 
     private void UpdateAnimation()
     {
